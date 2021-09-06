@@ -5,6 +5,15 @@ from sqlalchemy import create_engine
 
 
 def load_data(messages_filepath, categories_filepath):
+    """Load Messages and Categories data from filepaths
+
+    INPUT
+    messages_filepath -- str, path to file
+    categories_filepath -- str, path to file
+
+    OUTPUT
+    df - pandas DataFrame, combined Messages and Categories data
+    """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = pd.merge(messages, categories, on="id")
@@ -12,6 +21,14 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """Clean data included in the DataFrame and transform categories part
+
+    INPUT
+    df -- pandas DataFrame, combined Messages and Categories data
+
+    OUTPUT
+    df -- pandas DataFrame, clean combined Messages and Categories data
+    """
     categories = df['categories'].str.split(";", expand=True)
     row = categories.loc[0,]
     category_colnames = row.apply(lambda x: x.split("-")[0])
@@ -33,11 +50,23 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    """Saves DataFrame (df) to SQLite database path
+
+    INPUT
+    df -- pandas DataFrame, cleancombined Messages and Categories data
+    database_filename -- str, Path to SQLite database
+    """
     engine = create_engine('sqlite:///' + database_filename)
     df.to_sql('DisastersTable', engine, if_exists = 'replace', index=False)
 
 
 def main():
+    """Main function which will:
+    - Load the data
+    - Clean it
+    - Save it in a Database
+    """
+    
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]

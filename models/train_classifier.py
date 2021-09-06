@@ -23,6 +23,16 @@ import pickle
 
 
 def load_data(database_filepath):
+    """
+    Loads the data from the Database
+
+    INPUT:
+        database_filepath -- str,  path to SQLite database
+    OUTPUT:
+        X -- pandas df, containins features
+        Y -- pandas df, containins labels
+        category_names -- list, contains category names
+    """
     engine = create_engine('sqlite:///' + database_filepath)
     df = pd.read_sql_table('DisastersTable', con=engine)
     X = df['message']
@@ -33,6 +43,14 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    """
+    Tokenize the text
+
+    INPUT:
+        text -- str, message to be tokenized
+    OUTPUT:
+        words -- list, tokens extracted from text
+    """
     # Normalizing text
     normalized_text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower())
     # Tokenizing text
@@ -46,6 +64,12 @@ def tokenize(text):
 
 
 def build_model():
+    """
+    Builds Pipeline
+
+    Output:
+        cv_model -- ML Pipeline, processes text messages and applies classifier.
+    """
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -61,16 +85,40 @@ def build_model():
 
 
 def evaluate_model(pipeline, X_test, Y_test, target_names):
+    """
+    Evaluates Model
+
+    INPUT:
+        pipeline -- Scikit ML Pipeline
+        X_test -- Test features
+        Y_test -- Test labels
+        taget_names -- label names
+    """
     y_pred = pipeline.predict(X_test)
 
     print(classification_report(Y_test.values, y_pred, target_names=target_names))
 
 
 def save_model(model, model_filepath):
+     """
+    Save model as a pickle file
+
+    INPUT:
+        model -- GridSearchCV or Scikit ML Pipeline object
+        model_filepath -- str, path to save .pkl file on
+
+    """
     pickle.dump(model, open(model_filepath, 'wb'))
 
 
 def main():
+    """
+    Main function:
+        1) Extract the data from the SQLite database
+        2) Train the Machine Learning model
+        3) Evalueate model performance
+        4) Save the trained model as Pickle file
+    """
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
