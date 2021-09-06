@@ -10,4 +10,12 @@
 
 ## Files in this repository
 - app
-  - app
+  - run.py: script to run the web app
+  - templates: folder that contains HTML templates
+- data
+  - disaster_categories.csv: Disaster Categories data set.
+  - disaster_messages.csv: Disaster Messages data set.
+  - process_data.py: script that reads in the data, cleans it, and stores it in a SQLite database
+- models
+  - train_classifier.py: script that trains the Machine Learning model
+- App screenshots: contains screenshots of the web app
