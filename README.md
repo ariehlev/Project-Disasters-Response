@@ -1,5 +1,10 @@
 # Project-Disasters-Response
  
+ ## Summary
+ In this project we have a data set containing real messages that were sent during disaster events. The aim was to create a machine learning pipeline to categorize these events so that you can send the messages to an appropriate disaster relief agency.
+The project includes a web app where an emergency worker can input a new message and get classification results in several categories. The web app will also display visualizations of the data. 
+ 
+ 
  ## How to run the Python scripts and the web app
  The Python scripts should be run in the following order:
  1. Make sure you are in the root of this repository
